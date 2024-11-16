@@ -1,0 +1,101 @@
+
+body {
+    background-color: #FFCF9D;
+}
+
+h1 {
+    color: rgb(158, 87, 0);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login {
+    background-color: #DE8F5F; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    border-radius: 20%;
+    text-align: center;
+    text-decoration: none;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+    max-width: 10%;
+
+}
+
+.logout {
+
+    background-color: #DE8F5F; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    border-radius: 20%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+  
+  }
+
+
+.alignCentre {
+    display: flex;
+    justify-content: center;
+
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    background-color: #fff2ea;
+    padding: 30px;
+
+}
+
+#projectTitle {
+    display: flex;
+    justify-content: center;
+    background-color: #e56509;
+    padding: 30px;
+    color: #ffd9c7;
+
+}
+#goMap {
+    background-color: #f19c1b;
+}
+
+#profileDropDown {
+    display: flex;
+    justify-content: center;
+    background-color: #fff2ea;
+    padding: 30px;
+}
+
+img {
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    max-width: 300px;
+
+}
+
+nav a {
+    text-decoration: none;
+    outline: none;
+    display: flex;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: #ffefe5;
+    font-size: 2em;
+}
+nav a:hover {
+    color: #ffbf7b;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 15px 32px;
+}

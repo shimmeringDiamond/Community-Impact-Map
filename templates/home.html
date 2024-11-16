@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Auth0 Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styles.css') }}">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <h1 id="projectTitle">Community Impact Map</h1>
+    <section> 
+    {% if session %}
+    <h1 class="title">Welcome {{session.userinfo.name}}!</h1>
+    <nav id="goMap">
+      <ul>
+        <li><a href="map.html">Go to the Map</a></li>
+      </ul>
+      <img src="pin.png" alt="pin" >
+    </nav>
+    
+    <p class="alignCentre"><a class = "logout" href="/logout" id="qsLogoutBtn">Logout</a></p>
+    <div><pre>{{pretty}}</pre></div>
+    {% else %}
+    
+    <h1 id="profileDropDown">Welcome Guest</h1>
+    <p class="alignCentre"><a class ="login" href="/login" id="qsLoginBtn">Login</a></p>
+    {% endif %}
+    </section>
+  </body>
+</html>
