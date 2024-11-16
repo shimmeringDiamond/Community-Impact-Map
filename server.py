@@ -15,6 +15,7 @@ if ENV_FILE:
 
 app = Flask(__name__)
 app.secret_key = env.get("APP_SECRET_KEY")
+google_api_key=env.get("GOOGLE_MAPS_API_KEY")
 
 
 oauth = OAuth(app)
@@ -37,8 +38,14 @@ def home():
         "home.html",
         session=session.get("user"),
         pretty=json.dumps(session.get("user"), indent=4),
+        google_api_key=google_api_key
     )
 
+@app.route("/map")
+def map():
+    return render_template(
+        "map.html"
+    )
 
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
