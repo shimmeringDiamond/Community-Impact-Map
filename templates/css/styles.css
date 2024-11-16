@@ -55,9 +55,9 @@ h1 {
 #projectTitle {
     display: flex;
     justify-content: center;
-    background-color: #ff9b5d;
+    background-color: #e56509;
     padding: 30px;
-    color: #e7860f;
+    color: #ffd9c7;
 
 }
 #goMap {
