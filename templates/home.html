@@ -2,8 +2,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Auth0 Example</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='./css/styles.css') }}">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   </head>
   <body>
     <h1 id="projectTitle">Community Impact Map</h1>
@@ -12,7 +11,7 @@
     <h1 class="title">Welcome {{session.userinfo.name}}!</h1>
     <nav id="goMap">
       <ul>
-        <li><a href="map.html">Go to the Map</a></li>
+        <li><a href="map">Go to the Map</a></li>
       </ul>
       <img src="pin.png" alt="pin" >
     </nav>
