@@ -48,10 +48,11 @@ h1 {
     display: flex;
     justify-content: center;
     background-color: #fff2ea;
+    padding: 30px;
 }
 
 #goMap {
-    background-color: #d44700;
+    background-color: #f19c1b;
 }
 
 #profileDropDown {
