@@ -41,6 +41,11 @@ def home():
         google_api_key=google_api_key
     )
 
+@app.route("/map")
+def map():
+    return render_template(
+        "map.html"
+    )
 
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
