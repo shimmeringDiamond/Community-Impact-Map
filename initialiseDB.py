@@ -30,8 +30,6 @@ eventData.execute('''INSERT INTO Users (UserID, Name) VALUES
                     ('2sdihfishfifsdfu3rhi', 'Test');''')
 
 eventData.execute('''INSERT INTO Events (Name, Description, Progress, Latitude, Longitude) VALUES
-                    ('Uluru', 'Uluru, also referred to as Ayers Rock, is a large
-                sandstone rock formation in the southern part of the
-                Northern Territory, central Australia.', 50, -25.363, 131.044);''')
+                    ('Uluru', 'Uluru, also referred to as Ayers Rock, is a large sandstone rock formation in the southern part of the Northern Territory, central Australia.', 50, -25.363, 131.044);''')
 
 eventData.commit()
