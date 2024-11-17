@@ -115,48 +115,76 @@
 <body>
   {% if session %}
   <!-- Map container -->
-  <button id="open-form-btn">Add New Event</button>
+  
   <div id="map"></div>
 
-  <div id="event-details" style="margin: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
-    <h3>Event Details</h3>
-    <p id="event-description">Click on an event marker to see details.</p>
-    <p id="event-progress"></p>
-  </div>
 
-  <div id="overlay"></div>
-  <div id="popup-form">
-    <h2>Add New Event</h2>
-    <form id="event-form">
-      <div class="form-control">
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="Test" required>
+  <section id="flex-container">
+    
+    <section id="sidewindow">
+      <h1>Location</h1>
+      <button id="open-form-btn">Add New Event</button>
+      <div id="event-details" style="margin: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
+        <h3>Event Details</h3>
+        <p id="event-description">Click on an event marker to see details.</p>
+        <p id="event-progress"></p>
       </div>
-      <div class="form-control">
-        <label for="progress">Progress:</label>
-        <input type="text" id="progress" name="progress" value="20" required>
+    </section>
+    <div id="maplocation">
+    {% if session %}
+      <gmp-map center="-25.363, 131.044" zoom="4" map-id="DEMO_MAP_ID">
+        <gmp-advanced-marker position="-25.363, 131.044" title="Uluru" gmp-clickable></gmp-advanced-marker>
+      </gmp-map>
+    
+      <button class="open-button" onclick="openMenu()">Open Menu</button>
+      <div class="menu-popup" id="myMenu">
+        
+        <form action="/action_page.php" class="menu-container">
+          <h1>Menu</h1>
+          
+          <div class="dropdown" id="categoryDropdown">
+            <span>Category</span>
+            <div class="dropdown-content">
+              <a id='category1' href="#" onclick="selectCategory('Category 1')">Pick Litter</a>
+              <a id='category2' href="#" onclick="selectCategory('Category 2')">Community Meeting</a>
+              <a id='category3'href="#" onclick="selectCategory('Category 3')">Find Cat</a>
+              <!-- Add more categories as needed -->
+            </div>
+          </div>   
+          <input type="text" placeholder="Find task..." id="myInput" onkeyup="filterFunction()">
+          <button type="button" class="btn cancel" onclick="closeMenu()">Close</button>
+        </form>
       </div>
-      <div class="form-control">
-        <label for="latitude">Latitude:</label>
-        <input type="number" id="latitude" name="latitude" step="any" value="53.3806457" required>
+      <div id="overlay"></div>
+      <div id="popup-form">
+        <h2>Add New Event</h2>
+        <form id="event-form">
+          <div class="form-control">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" value="Test" required>
+          </div>
+          <div class="form-control">
+            <label for="progress">Progress:</label>
+            <input type="text" id="progress" name="progress" value="20" required>
+          </div>
+          <div class="form-control">
+            <label for="latitude">Latitude:</label>
+            <input type="number" id="latitude" name="latitude" step="any" value="53.3806457" required>
+          </div>
+          <div class="form-control">
+            <label for="longitude">Longitude:</label>
+            <input type="number" id="longitude" name="longitude" step="any" value="-1.489808" required>
+          </div>
+          <button type="submit">Submit</button>
+          <button type="button" id="close-form-btn">Cancel</button>
+        </form>
       </div>
-      <div class="form-control">
-        <label for="longitude">Longitude:</label>
-        <input type="number" id="longitude" name="longitude" step="any" value="-1.489808" required>
-      </div>
-      <button type="submit">Submit</button>
-      <button type="button" id="close-form-btn">Cancel</button>
-    </form>
-  </div>
-  {% else %}
-  <h1 id="profileDropDown">Welcome Guest</h1>
 
-
-  
-
-
-  <p><a href="/login" id="qsLoginBtn">Login</a></p>
-  {% endif %}
+    {% else %}
+    <h1 id="profileDropDown">Welcome Guest</h1>
+    <p><a href="/login" id="qsLoginBtn">Login</a></p>
+    {% endif %}
+    </div>  
 </body>
 <script>
   // Open and close the popup form
