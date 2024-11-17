@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="author" content="Diamond White, Emily Kong, Ashik Tomy">
+  <title>CommunityMap</title>
+  <script async src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap&libraries=maps,marker&v=beta" defer></script>
+  
+  <script>
+    let user = {{ user | tojson }};
+    let events = {{ events | tojson }};
+
+    function initMap() {
+      // Initialize the map centered on the user's location
+      const userLocation = { lat: user.lat, lng: user.long };
+
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: userLocation,
+        zoom: 10,
+      });
+
+      // Add a marker for the user's location
+      const userMarker = new google.maps.Marker({
+        position: userLocation,
+        map,
+        title: "Your Location",
+        icon: {
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Optional: different color for user
+        }
+      });
+
+      // Add markers for all events
+      events.forEach(event => {
+        const eventLocation = { lat: event.latitude, lng: event.longitude };
+
+        const contentString = `
+          <div>
+            <h3>${event.description}</h3>
+            <p>Progress: ${event.progress}</p>
+          </div>
+        `;
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: contentString,
+          ariaLabel: event.description,
+        });
+
+        const eventMarker = new google.maps.Marker({
+          position: eventLocation,
+          map,
+          title: event.description,
+        });
+
+        // Open InfoWindow on marker click
+        eventMarker.addListener("click", () => {
+          infoWindow.open({
+            anchor: eventMarker,
+            map,
+          });
+          document.getElementById("event-description").textContent = `Description: ${event.description}`;
+          document.getElementById("event-progress").textContent = `Progress: ${event.progress}`;
+        });
+      });
+    }
+  </script>
+  
+  <style>
+    /**
+     * @license
+     * Copyright 2023 Google LLC. All Rights Reserved.
+     * SPDX-License-Identifier: Apache-2.0
+     */
+
+    /*
+     * Optional: Makes the sample page fill the window.
+     */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+    #popup-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .form-control {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  {% if session %}
+  <!-- Map container -->
+  <button id="open-form-btn">Add New Event</button>
+  <div id="map"></div>
+
+  <div id="event-details" style="margin: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
+    <h3>Event Details</h3>
+    <p id="event-description">Click on an event marker to see details.</p>
+    <p id="event-progress"></p>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="popup-form">
+    <h2>Add New Event</h2>
+    <form id="event-form">
+      <div class="form-control">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="Test" required>
+      </div>
+      <div class="form-control">
+        <label for="progress">Progress:</label>
+        <input type="text" id="progress" name="progress" value="20" required>
+      </div>
+      <div class="form-control">
+        <label for="latitude">Latitude:</label>
+        <input type="number" id="latitude" name="latitude" step="any" value="53.3806457" required>
+      </div>
+      <div class="form-control">
+        <label for="longitude">Longitude:</label>
+        <input type="number" id="longitude" name="longitude" step="any" value="-1.489808" required>
+      </div>
+      <button type="submit">Submit</button>
+      <button type="button" id="close-form-btn">Cancel</button>
+    </form>
+  </div>
+  {% else %}
+  <h1 id="profileDropDown">Welcome Guest</h1>
+
+
+  
+
+
+  <p><a href="/login" id="qsLoginBtn">Login</a></p>
+  {% endif %}
+</body>
+<script>
+  // Open and close the popup form
+  const openFormBtn = document.getElementById("open-form-btn");
+  const closeFormBtn = document.getElementById("close-form-btn");
+  const popupForm = document.getElementById("popup-form");
+  const overlay = document.getElementById("overlay");
+
+  openFormBtn.addEventListener("click", () => {
+    popupForm.style.display = "block";
+    overlay.style.display = "block";
+  });
+
+  closeFormBtn.addEventListener("click", () => {
+    popupForm.style.display = "none";
+    overlay.style.display = "none";
+  });
+
+  // Handle form submission
+  const eventForm = document.getElementById("event-form");
+  eventForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Collect form data
+    const formData = {
+      description: document.getElementById("description").value,
+      progress: document.getElementById("progress").value,
+      latitude: parseFloat(document.getElementById("latitude").value),
+      longitude: parseFloat(document.getElementById("longitude").value),
+    };
+
+    // Send data to the server
+    const response = await fetch("/add_event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+
+    // Handle success or error
+    if (response.ok) {
+      alert(result.message);
+      popupForm.style.display = "none";
+      overlay.style.display = "none";
+      eventForm.reset();
+      // Optionally, refresh the events list or map
+    } else {
+      alert("Failed to add event: " + result.message);
+    }
+  });
+</script>
+</html>
