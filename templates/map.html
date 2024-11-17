@@ -129,6 +129,40 @@
   let user = {{ user | tojson }};
   let events = {{ events | tojson }};
 
+  const eventForm = document.getElementById("event-form");
+  eventForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log(user)
+    // Collect form data
+    const formData = {
+      description: document.getElementById("description").value,
+      progress: document.getElementById("progress").value,
+      latitude: parseFloat(document.getElementById("latitude").value),
+      longitude: parseFloat(document.getElementById("longitude").value),
+      user_sub: user.sub
+    };
+
+    // Send data to the server
+    const response = await fetch("/add_event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+
+    // Handle success or error
+    if (response.ok) {
+      alert(result.message);
+      popupForm.style.display = "none";
+      overlay.style.display = "none";
+      eventForm.reset();
+      // Optionally, refresh the events list or map
+    } else {
+      alert("Failed to add event: " + result.message);
+    }
+  });
+
   function initMap() {
     // Initialize the map centered on the user's location
     const userLocation = { lat: user.lat, lng: user.long };
@@ -187,6 +221,7 @@
   }
 </script>
 <script>
+
   // Open and close the popup form
   const openFormBtn = document.getElementById("open-form-btn");
   const closeFormBtn = document.getElementById("close-form-btn");
@@ -204,37 +239,6 @@
   });
 
   // Handle form submission
-  const eventForm = document.getElementById("event-form");
-  eventForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    // Collect form data
-    const formData = {
-      description: document.getElementById("description").value,
-      progress: document.getElementById("progress").value,
-      latitude: parseFloat(document.getElementById("latitude").value),
-      longitude: parseFloat(document.getElementById("longitude").value),
-    };
-
-    // Send data to the server
-    const response = await fetch("/add_event", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    const result = await response.json();
-
-    // Handle success or error
-    if (response.ok) {
-      alert(result.message);
-      popupForm.style.display = "none";
-      overlay.style.display = "none";
-      eventForm.reset();
-      // Optionally, refresh the events list or map
-    } else {
-      alert("Failed to add event: " + result.message);
-    }
-  });
+  
 </script>
 </html>
