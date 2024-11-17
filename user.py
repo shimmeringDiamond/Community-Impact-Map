@@ -1,7 +1,7 @@
 import sqlite3
 import math
 
-class user():
+class User():
     def __init__(self):
         self.name = ''
         self.sub = ''
@@ -24,8 +24,8 @@ class user():
 
         if int(output) != 1:
             print("False")
-            command = (f'''INSERT INTO Users (UserID) 
-                       VALUES ('{self.sub}');''')
+            command = (f'''INSERT INTO Users (UserID, Name) 
+                       VALUES ('{self.sub}, {self.name}');''')
             eventData.execute(command)
             eventData.commit()
 
@@ -53,36 +53,6 @@ class user():
         self.name = output
         return output
     
-    def getLatsInRange(self):
-        eventData = sqlite3.connect('eventData.db')
-        command = (f'''SELECT Latitude FROM Events;''')
-
-        eventDataOutput = eventData.execute(command)
-        eventData.commit()
-
-        output = (eventDataOutput.fetchall())[0]
-
-        for i in output:
-            if abs(float(i)-self.lat) < 0.09:
-                self.eventLats.append(i)
-
-        return (self.eventLats)
-        
-    def getLongsInRange(self):
-        eventData = sqlite3.connect('eventData.db')
-        command = (f'''SELECT Longitude FROM Events;''')
-
-        eventDataOutput = eventData.execute(command)
-        eventData.commit()
-
-        output = (eventDataOutput.fetchall())[0]
-
-        for i in output:
-            if abs(float(i)-self.long) < 0.2:
-                self.eventLongs.append(i)
-        
-        return (self.eventLongs)
-    
     def linkEvent(self, eventID):
         eventData = sqlite3.connect('eventData.db')
 
@@ -92,6 +62,17 @@ class user():
         
         eventData.execute(command)
         eventData.commit()
+
+    def to_dict(self):
+        return {
+            "sub": self.sub,
+            "name": self.name,
+            "lat": self.lat,
+            "long": self.long
+        }
+    
+    def __repr__(self):
+        return f"User(sub={self.sub}, name={self.name})"
 
 
     
