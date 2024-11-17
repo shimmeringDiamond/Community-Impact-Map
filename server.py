@@ -100,7 +100,8 @@ def map():
         event.getLongitude()
         userEvents.append(event.to_dict())
     
-    nearEvents = Event.getEvents(user.lat, user.long, 20)
+    nearEvents = Event.getEvents(user.lat, user.long, 400)
+
     print(nearEvents)
     print(userEvents)
 
@@ -109,7 +110,7 @@ def map():
     return render_template(
         "map.html",
         google_api_key=google_api_key,
-        events=userEvents,
+        events=events,
         user=user.to_dict(),
         userEvents=userEvents
     )
