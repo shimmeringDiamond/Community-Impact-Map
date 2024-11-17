@@ -16,6 +16,7 @@ class User:
             }
 
     def getEventIDs(self):
+        print(User.users_db)
         """Return a list of event IDs associated with the user."""
         if self.sub in User.users_db:
             return User.users_db[self.sub]["ids"]
@@ -26,8 +27,11 @@ class User:
         return User.users_db.get(self.sub, {}).get("name", "Unknown")
 
     def linkEvent(self, id):
+        print("trying to link")
+        print(self.sub)
         """Link an event to the user."""
         if self.sub in User.users_db:
+            print("true")
             User.users_db[self.sub]["ids"].append(id)
 
     def to_dict(self):

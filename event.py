@@ -50,7 +50,9 @@ class Event:
         """Convert the event object into a JSON-serializable dictionary."""
         return {
             "description": self.description,
-            "progress": self.progress
+            "progress": self.progress,
+            "latitude": self.latitude,
+            "longitude": self.longitude
         }
     
     @staticmethod
@@ -71,9 +73,11 @@ class Event:
         """
         nearby_events = []
         for id, event_data in Event.events_db.items():
+            
             event_lat = event_data["latitude"]
             event_lon = event_data["longitude"]
             distance = Event.haversine_distance(lat, lon, event_lat, event_lon)
+
             if distance <= radius:
                 nearby_events.append(Event(
                     id=id,
