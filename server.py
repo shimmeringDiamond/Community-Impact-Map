@@ -7,7 +7,9 @@ from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
-from flask import Flask, redirect, render_template, session, url_for
+
+from flask import Flask, jsonify, redirect, render_template, session, url_for
+from flask import request
 
 from user import User
 from event import Event
@@ -96,9 +98,11 @@ def map():
         event.getProgress()
         event.getLatitude()
         event.getLongitude()
-        userEvents.append(event)
+        userEvents.append(event.to_dict())
     
-    nearEvents = Event.getEvents(user.lat, user.long)
+    nearEvents = Event.getEvents(user.lat, user.long, 20)
+    print(nearEvents)
+    print(userEvents)
 
     events = userEvents + nearEvents
 
@@ -106,7 +110,7 @@ def map():
         "map.html",
         google_api_key=google_api_key,
         events=userEvents,
-        user=user,
+        user=user.to_dict(),
         userEvents=userEvents
     )
 
