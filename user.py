@@ -1,41 +1,69 @@
-class User:
-    users_db = {}  # Simulate a database with a dictionary
+import sqlite3
+import math
 
-    def __init__(self, sub=None, name=None):
-        self.sub = sub
-        self.name = name
+class User():
+    def __init__(self):
+        self.name = ''
+        self.sub = ''
         self.lat = 0
-        self.long =0 
+        self.long = 0
+        self.eventIDs = []
+        self.eventLats = []
+        self.eventLongs = []
 
     def ensure(self):
-        """If the user does not exist, add them to the 'database'."""
-        if self.sub not in User.users_db:
-            User.users_db[self.sub] = {
-                "name": self.name,
-                "ids": []
-            }
+        eventData = sqlite3.connect('eventData.db')
+        command = (f'''SELECT COUNT(1)
+                    FROM Users
+                    WHERE UserID == '{self.sub}';''')
+        
+        eventDataOutput = eventData.execute(command)
+        eventData.commit()
+
+        output = (eventDataOutput.fetchall())[0][0]
+
+        if int(output) != 1:
+            print("False")
+            command = (f'''INSERT INTO Users (UserID, Name) 
+                       VALUES ('{self.sub}, {self.name}');''')
+            eventData.execute(command)
+            eventData.commit()
 
     def getEventIDs(self):
-        print(User.users_db)
-        """Return a list of event IDs associated with the user."""
-        if self.sub in User.users_db:
-            return User.users_db[self.sub]["ids"]
-        return []
+        eventData = sqlite3.connect('eventData.db')
+        command = (f'''SELECT EventID FROM Events WHERE UserID == '{self.sub}';''')
 
+        eventDataOutput = eventData.execute(command)
+        eventData.commit()
+
+        output = (eventDataOutput.fetchall())[0]
+
+        self.eventIDs = output
+        return output
+    
     def getName(self):
-        """Get the user's name from the 'database'."""
-        return User.users_db.get(self.sub, {}).get("name", "Unknown")
+        eventData = sqlite3.connect('eventData.db')
+        command = (f'''SELECT Name FROM Users WHERE UserID == '{self.sub}';''')
 
-    def linkEvent(self, id):
-        print("trying to link")
-        print(self.sub)
-        """Link an event to the user."""
-        if self.sub in User.users_db:
-            print("true")
-            User.users_db[self.sub]["ids"].append(id)
+        eventDataOutput = eventData.execute(command)
+        eventData.commit()
+
+        output = (eventDataOutput.fetchall())[0][0]
+
+        self.name = output
+        return output
+    
+    def linkEvent(self, eventID):
+        eventData = sqlite3.connect('eventData.db')
+
+        command = (f'''UPDATE Events
+                   SET UserID = '{self.sub}'
+                    WHERE EventID == {eventID};''')
+        
+        eventData.execute(command)
+        eventData.commit()
 
     def to_dict(self):
-        """Convert the User object into a JSON-serializable dictionary."""
         return {
             "sub": self.sub,
             "name": self.name,
@@ -45,5 +73,6 @@ class User:
     
     def __repr__(self):
         return f"User(sub={self.sub}, name={self.name})"
-    
+
+
     
