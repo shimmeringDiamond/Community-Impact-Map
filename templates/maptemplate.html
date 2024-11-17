@@ -1,0 +1,143 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="witdth=device-width, initial-scale=1.0">
+    <meta name="author" content="Diamond White, Emily Kong, Ashik Tomy">
+    <link rel="stylesheet" href="./css/mapstyles.css">
+    
+    <script type="text/javascript" src="javascript.js"></script>
+
+
+    <title>Community Impact Map</title>
+    <script async src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=console.debug&libraries=maps,marker&v=beta" defer></script>
+
+      
+        <script>
+          /**
+           * @license
+           * Copyright 2023 Google LLC. All Rights Reserved.
+           * SPDX-License-Identifier: Apache-2.0
+           */
+
+          // This example displays a marker at the center of Australia.
+          // When the user clicks the marker, an info window opens.
+          async function initMap() {
+            const contentString = `
+              <div>
+                <h1>Uluru</h1>
+                <div>
+                  <p>
+                    <b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large
+                    sandstone rock formation in the southern part of the
+                    Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi)
+                    south west of the nearest large town, Alice Springs; 450&#160;km
+                    (280&#160;mi) by road. Kata Tjuta and Uluru are the two major
+                    features of the Uluru - Kata Tjuta National Park. Uluru is
+                    sacred to the Pitjantjatjara and Yankunytjatjara, the
+                    Aboriginal people of the area. It has many springs, waterholes,
+                    rock caves and ancient paintings. Uluru is listed as a World
+                    Heritage Site.
+                  </p>
+                  <p>
+                    Attribution: Uluru,
+                    <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">
+                      https://en.wikipedia.org/w/index.php?title=Uluru
+                    </a>
+                    (last visited June 22, 2009).
+                  </p>
+                </div>
+              </div>`;
+            
+            const infoWindow = new google.maps.InfoWindow({
+              content: contentString,
+              ariaLabel: "Uluru",
+            });
+            
+            const marker = document.querySelector('gmp-advanced-marker');
+            marker.addEventListener('gmp-click', () => {
+              infoWindow.open({anchor: marker});
+            });
+          }
+          
+          window.initMap = initMap;
+        </script>
+        
+        <style>
+          /**
+          * @license
+          * Copyright 2023 Google LLC. All Rights Reserved.
+          * SPDX-License-Identifier: Apache-2.0
+          */
+
+          /*
+          * Optional: Makes the sample page fill the window.
+          */
+          html,
+          body {
+            
+            margin: 0;
+            padding: 0;
+            height: 90%;
+            width: 90%;
+          }
+        </style>
+  
+
+    
+  </head>
+  <body>
+    <section id="flex-container">
+    
+      <section id="sidewindow">
+        <h1>Location</h1>
+      </section>
+      <div id="maplocation">
+      {% if session %}
+      
+        <gmp-map center="-25.363, 131.044" zoom="4" map-id="DEMO_MAP_ID">
+          <gmp-advanced-marker position="-25.363, 131.044" title="Uluru" gmp-clickable></gmp-advanced-marker>
+        </gmp-map>
+      
+      
+
+      {% else %}
+      <h1 id="profileDropDown">Welcome Guest</h1>
+      <p><a href="/login" id="qsLoginBtn">Login</a></p>
+      {% endif %}
+      </div>
+
+      <!-- button for menu -->
+      <button class="open-button" onclick="openMenu()">Open Menu</button>
+      <div class="menu-popup" id="myMenu">
+        
+        <form action="/action_page.php" class="menu-container">
+          <h1>Menu</h1>
+          
+          
+          <div class="dropdown" id="categoryDropdown">
+            <span>Category</span>
+            <div class="dropdown-content">
+              <a id='category1' href="#" onclick="selectCategory('Category 1')">Pick Litter</a>
+              <a id='category2' href="#" onclick="selectCategory('Category 2')">Community Meeting</a>
+              <a id='category3'href="#" onclick="selectCategory('Category 3')">Find Cat</a>
+              <!-- Add more categories as needed -->
+            </div>
+          </div>   
+          <input type="text" placeholder="Find task..." id="myInput" onkeyup="filterFunction()">
+          <!--  
+          <select name="tasks" id="tasks">
+            <option value="litter">Pick Litter</option>
+            <option value="feedcat">Feed cat</option>
+            <option value="communitymeet">Community Meeting</option>
+          </select>
+          <input type="submit" value="Submit"/>
+          -->
+          <button type="button" class="btn cancel" onclick="closeMenu()">Close</button>
+        </form>
+      </div>
+
+      
+    
+    
+  </body> 
+</html>
